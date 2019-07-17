@@ -1,9 +1,10 @@
 const { gql } = require('apollo-server'),
-  { getAlbum, getPhotos } = require('./resolvers');
+  { getAlbum, getPhotos, albumsList } = require('./resolvers');
 
 module.exports = {
   queries: {
-    album: getAlbum
+    album: getAlbum,
+    albums: albumsList
   },
   fieldsQueries: {
     photos: getPhotos,
@@ -12,6 +13,7 @@ module.exports = {
   schema: gql`
     extend type Query {
       album(id: ID): Album!
+      albums(offset: Int, limit: Int, orderBy: String): [Album!]!
     }
   `
 };
