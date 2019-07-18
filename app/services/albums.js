@@ -3,8 +3,6 @@ const { albums_api_url } = require('../../config').common.external_apis,
   errors = require('../errors'),
   logger = require('../logger');
 
-console.log(albums_api_url);
-
 exports.findAlbums = () => {
   const options = {
     method: 'GET',
