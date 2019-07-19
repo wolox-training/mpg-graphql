@@ -13,7 +13,7 @@ module.exports = {
   schema: gql`
     extend type Query {
       album(id: ID): Album!
-      albums(offset: Int, limit: Int, orderBy: String, filter: String): [Album!]!
+      albums(offset: Int = 0, limit: Int = 3, orderBy: AlbumFields = id, filter: String): [Album!]!
     }
   `
 };
