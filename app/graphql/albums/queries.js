@@ -1,5 +1,6 @@
 const { gql } = require('apollo-server'),
-  { getAlbum, getPhotos, albumsList } = require('./resolvers');
+  { getAlbum, getPhotos, albumsList } = require('./resolvers'),
+  { DEFAULT_LIMIT, DEFAULT_OFFSET, DEFAULT_ORDER_BY } = require('../../constants/defaultValues');
 
 module.exports = {
   queries: {
@@ -13,7 +14,10 @@ module.exports = {
   schema: gql`
     extend type Query {
       album(id: ID): Album!
-      albums(offset: Int = 0, limit: Int = 3, orderBy: AlbumFields = id, filter: String): [Album!]!
+      albums(offset: Int = ${DEFAULT_OFFSET}, 
+             limit: Int = ${DEFAULT_LIMIT}, 
+             orderBy: String = "${DEFAULT_ORDER_BY}", 
+             filter: String): [Album!]!
     }
   `
 };
