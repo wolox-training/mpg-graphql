@@ -1,31 +1,43 @@
-const config = require('../../config'),
+const { albums_api_url } = require('../../config').common.external_apis,
   request = require('request-promise'),
   errors = require('../errors'),
   logger = require('../logger');
 
 exports.findAlbums = () => {
-  logger.info(`Consuming an external api with url: ${config.common.external_api_url}/albums`);
-  return request({ uri: `${config.common.external_api_url}/albums`, json: true }).catch(err => {
+  const options = {
+    method: 'GET',
+    uri: albums_api_url.albums,
+    json: true
+  };
+  logger.info(`Consuming an external api with url: ${options.uri}/albums`);
+  return request(options).catch(err => {
     logger.error(err.message);
     throw errors.externalApiError('Error consuming external API');
   });
 };
 
 exports.findPhotosByAlbumId = albumId => {
-  logger.info(
-    `Consuming an external api with url: ${config.common.external_api_url}/photos?albumId=${albumId}`
-  );
-  return request({ uri: `${config.common.external_api_url}/photos?albumId=${albumId}`, json: true }).catch(
-    err => {
-      logger.error(err.message);
-      throw errors.externalApiError('Error consuming external API');
-    }
-  );
+  const options = {
+    method: 'GET',
+    uri: albums_api_url.photos,
+    qs: { albumId },
+    json: true
+  };
+  logger.info(`Consuming an external api with url: ${options.uri}?albumId=${albumId}`);
+  return request(options).catch(err => {
+    logger.error(err.message);
+    throw errors.externalApiError('Error consuming external API');
+  });
 };
 
 exports.findAlbumById = id => {
-  logger.info(`Consuming an external api with url: ${config.common.external_api_url}/albums/${id}`);
-  return request({ uri: `${config.common.external_api_url}/albums/${id}`, json: true }).catch(err => {
+  const options = {
+    method: 'GET',
+    uri: `${albums_api_url.albums}/${id}`,
+    json: true
+  };
+  logger.info(`Consuming an external api with url: ${options.uri}`);
+  return request(options).catch(err => {
     logger.error(err.message);
     throw errors.externalApiError('Error consuming external API');
   });
