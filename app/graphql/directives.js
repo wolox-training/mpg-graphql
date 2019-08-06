@@ -1,10 +1,11 @@
 /* eslint-disable class-methods-use-this */
-const { gql } = require('apollo-server');
-const { SchemaDirectiveVisitor } = require('graphql-tools');
-const { defaultFieldResolver } = require('graphql');
-const getValidationFn = require('../utils/validationFunctions');
-const errors = require('../errors');
-const logger = require('../logger');
+const { gql } = require('apollo-server'),
+  { SchemaDirectiveVisitor } = require('graphql-tools'),
+  { defaultFieldResolver } = require('graphql');
+
+const getValidationFn = require('../utils/validationFunctions'),
+  errors = require('../errors'),
+  logger = require('../logger');
 
 class ValidateInputDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
