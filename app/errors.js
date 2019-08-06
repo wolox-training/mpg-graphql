@@ -1,4 +1,4 @@
-const { ApolloError } = require('apollo-server');
+const { ApolloError, UserInputError } = require('apollo-server');
 
 const createError = (message, statusCode) => new ApolloError(message, statusCode);
 
@@ -13,3 +13,4 @@ exports.badRequest = message => createError(message, BAD_REQUEST);
 exports.hashError = message => createError(message, HASH_ERROR);
 exports.dataBaseError = message => createError(message, DATABASE_ERROR);
 exports.externalApiError = message => createError(message, EXTERNAL_API_ERROR);
+exports.inputError = (message, invalidArgs) => new UserInputError(message, { invalidArgs });
