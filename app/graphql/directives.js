@@ -1,41 +1,30 @@
 /* eslint-disable class-methods-use-this */
 const { gql } = require('apollo-server'),
   { SchemaDirectiveVisitor } = require('graphql-tools'),
-  { defaultFieldResolver } = require('graphql');
-
-const getValidationFn = require('../utils/validationFunctions'),
-  errors = require('../errors'),
+  { defaultFieldResolver } = require('graphql'),
+  validateSchema = require('../utils/schemaValidator'),
   logger = require('../logger');
 
-class ValidateInputDirective extends SchemaDirectiveVisitor {
+class ValidateSchemaDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
     const { resolve = defaultFieldResolver } = field;
-    const { inputs } = this.args;
+    const { schema } = this.args;
 
     field.resolve = (...args) => {
-      const values = { ...args[1][field.args[0].name] };
-      const fieldValidations = inputs.reduce((errs, input) => {
-        const validationFn = getValidationFn(`${input}Validation`);
-        const isValid = validationFn(values[input]);
-        if (!isValid) {
-          errs.push({ message: `${input} is not a validad input` });
-        }
-        return errs;
-      }, []);
-      if (fieldValidations.length > 0) {
-        logger.error('Invalid inputs');
-        return errors.inputError('Invalidad inputs', fieldValidations);
-      }
-      return resolve.apply(this, args);
+      const data = { ...args[1][field.args[0].name] };
+      return validateSchema(data, schema).then(() => {
+        logger.info(`Schema ${schema} was validated succesfully`);
+        return resolve.apply(this, args);
+      });
     };
   }
 }
 
 module.exports = {
   resolvers: {
-    validateInput: ValidateInputDirective
+    validateSchema: ValidateSchemaDirective
   },
   schemas: gql`
-    directive @validateInput(inputs: [String]!) on FIELD_DEFINITION
+    directive @validateSchema(schema: String!) on FIELD_DEFINITION
   `
 };
