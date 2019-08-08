@@ -1,16 +1,22 @@
 const yup = require('yup'),
-  { validateEmail, validatePassword } = require('../utils/users');
+  { validateEmail, validatePassword } = require('../utils/users'),
+  {
+    EMAIL_VALIDATION_MSG,
+    EMAIL_VALIDATION_ERROR,
+    PASSWORD_VALIDATION_MSG,
+    PASSWORD_VALIDATION_ERROR
+  } = require('../constants/validations');
 
 const signUpSchema = yup.object().shape({
   email: yup
     .string()
     .email()
-    .test('Email validation', 'Email is not valid', validateEmail)
+    .test(EMAIL_VALIDATION_MSG, EMAIL_VALIDATION_ERROR, validateEmail)
     .required(),
   password: yup
     .string()
     .required()
-    .test('Password validation', 'Password is not valid', validatePassword)
+    .test(PASSWORD_VALIDATION_MSG, PASSWORD_VALIDATION_ERROR, validatePassword)
 });
 
 module.exports = signUpSchema;
