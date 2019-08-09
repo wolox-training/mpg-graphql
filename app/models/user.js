@@ -1,3 +1,5 @@
+const errors = require('../errors');
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'user',
@@ -33,7 +35,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  User.createModel = user => User.create(user);
+  User.createModel = user =>
+    User.create(user).catch(e => {
+      throw e.name === 'SequelizeUniqueConstraintError'
+        ? errors.invalidEmail('Email is alredy in use')
+        : errors.dataBaseError(e.name);
+    });
 
   User.getOne = user => User.findOne({ where: user });
 
