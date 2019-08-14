@@ -4,10 +4,9 @@ const { factory } = require('factory-girl'),
   { user: User } = models;
 
 factory.define('user', User, {
-  firstName: () => faker.name.firstName(),
-  lastName: () => faker.name.lastName(),
-  email: () => faker.internet.email(),
-  username: () => faker.internet.email(),
+  name: () => faker.name.firstName(),
+  lastname: () => faker.name.lastName(),
+  email: () => faker.internet.email(this.name, this.lastname, 'wolox.co'),
   password: () => faker.internet.password()
 });
 

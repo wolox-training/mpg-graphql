@@ -3,8 +3,8 @@ const { gql } = require('apollo-server');
 const getUser = id => gql`
     query {
         user(id: ${id}) {
-          firstName,
-          lastName,
+          name,
+          lastname,
           email
         }
       }`;
@@ -12,8 +12,8 @@ const getUser = id => gql`
 const getUsers = () => gql`
   query {
     users {
-      firstName
-      lastName
+      name
+      lastname
       email
     }
   }
@@ -23,12 +23,11 @@ const createUser = userInput => ({
   mutation: gql`
     mutation createUser($userInput: UserInput!) {
       createUser(user: $userInput) {
-        firstName
-        lastName
-        id
-        username
+        name
+        lastname
         password
         email
+        id
       }
     }
   `,
