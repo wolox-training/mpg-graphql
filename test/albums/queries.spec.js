@@ -9,10 +9,11 @@ describe('Albums', () => {
       }));
     it('should get an album properly', () =>
       query(album(1)).then(res => {
-        expect(res.data.album).toHaveProperty('title');
-        expect(res.data.album).toHaveProperty('artist');
-        expect(res.data.album).toHaveProperty('photos');
-        expect(res.data.album).toHaveProperty('id');
+        const albumData = { ...res.data.album };
+        expect(albumData).toHaveProperty('title');
+        expect(albumData).toHaveProperty('artist');
+        expect(albumData).toHaveProperty('photos');
+        expect(albumData).toHaveProperty('id');
       }));
     it('should get a list of albums', () =>
       query(albums()).then(res => {
