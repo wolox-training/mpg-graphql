@@ -14,8 +14,8 @@ describe('users', () => {
           expect(res.dataValues).toHaveProperty('lastname');
           expect(res.dataValues).toHaveProperty('email');
           expect(res.dataValues).toHaveProperty('password');
-          expect(res.dataValues).toHaveProperty('updated_at');
-          expect(res.dataValues).toHaveProperty('created_at');
+          expect(res.dataValues).toHaveProperty('updatedAt');
+          expect(res.dataValues).toHaveProperty('createdAt');
         });
       });
 
