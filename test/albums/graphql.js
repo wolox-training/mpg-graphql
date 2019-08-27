@@ -25,7 +25,7 @@ const albums = (offset = 0, limit = 3, orderBy = 'id') => gql`
   }
 `;
 
-const buyAlbum = (albumId, authorization) => ({
+const buyAlbum = albumId => ({
   mutation: gql`
     mutation buyAlbum($albumId: ID!) {
       buyAlbum(albumId: $albumId) {
@@ -38,10 +38,7 @@ const buyAlbum = (albumId, authorization) => ({
       }
     }
   `,
-  variables: { albumId },
-  headers: {
-    authorization
-  }
+  variables: { albumId }
 });
 
 module.exports = { album, albums, buyAlbum };

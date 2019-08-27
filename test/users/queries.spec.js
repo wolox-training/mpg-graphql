@@ -1,6 +1,8 @@
-const { query } = require('../server.spec'),
+const graphqlTestServer = require('../server.spec'),
   { getUser, getUsers } = require('./graphql'),
   userFactory = require('../factories/user');
+
+const { query } = graphqlTestServer();
 
 describe('users', () => {
   describe('queries', () => {

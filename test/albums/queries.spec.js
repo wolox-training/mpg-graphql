@@ -1,4 +1,5 @@
-const { query } = require('../server.spec'),
+const graphqlTestServer = require('../server.spec'),
+  { query } = graphqlTestServer(),
   { album, albums } = require('./graphql');
 
 describe('albums', () => {
