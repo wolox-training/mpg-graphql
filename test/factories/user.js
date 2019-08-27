@@ -11,7 +11,7 @@ factory.define(
     name: () => faker.name.firstName(),
     lastname: () => faker.name.lastName(),
     email: () => faker.internet.email(this.name, this.lastname, 'wolox.co'),
-    password: () => faker.internet.password()
+    password: () => faker.internet.password(8, false, /^[a-z0-9]+$/i)
   },
   {
     afterCreate: model =>
