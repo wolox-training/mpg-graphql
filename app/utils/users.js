@@ -9,3 +9,9 @@ exports.encryptPassword = password =>
     logger.error(err.message);
     throw errors.hashError('Error hashing password');
   });
+
+exports.validateEmail = email =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+  (email.split('@')[1] === 'wolox.co' || email.split('@')[1] === 'wolox.com.ar');
+
+exports.validatePassword = password => /^[a-z0-9]+$/i.test(password) && password.length >= 8;

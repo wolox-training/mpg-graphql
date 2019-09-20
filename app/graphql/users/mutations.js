@@ -17,7 +17,7 @@ module.exports = {
   },
   schema: gql`
     extend type Mutation {
-      createUser(user: UserInput!): User!
+      createUser(user: UserInput!): User! @validateSchema(schema: "signUp")
       login(credentials: LoginInput!): AccessToken
     }
   `
