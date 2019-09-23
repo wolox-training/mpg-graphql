@@ -9,7 +9,7 @@ exports.findAlbums = () => {
     uri: albums_api_url.albums,
     json: true
   };
-  logger.info(`Consuming an external api with url: ${options.uri}/albums`);
+  logger.info(`Consuming an external api with url: ${options.uri}`);
   return request(options).catch(err => {
     logger.error(err.message);
     throw errors.externalApiError('Error consuming external API');

@@ -1,6 +1,5 @@
 const { user: User } = require('../../models'),
   logger = require('../../logger'),
-  errors = require('../../errors'),
   { encryptPassword } = require('../../utils/users');
 
 exports.createNewUser = (parent, { user }) =>
@@ -12,5 +11,5 @@ exports.createNewUser = (parent, { user }) =>
     })
     .catch(e => {
       logger.error(`Error creating the user ${user.name} in the database`);
-      throw errors.dataBaseError(e);
+      throw e;
     });

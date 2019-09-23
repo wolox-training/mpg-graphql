@@ -9,8 +9,8 @@ describe('users', () => {
         query(getUser(user.id)).then(res => {
           expect(res.data).toEqual({
             user: {
-              firstName: user.firstName,
-              lastName: user.lastName,
+              name: user.name,
+              lastname: user.lastname,
               email: user.email
             }
           });
@@ -29,7 +29,7 @@ describe('users', () => {
         expect(res.data).toBeNull();
       }));
 
-    it('should return an empty array wheren there are no users', () =>
+    it('should return an empty array where there are no users', () =>
       query(getUsers()).then(res => {
         expect(res.data.users).toEqual([]);
       }));
