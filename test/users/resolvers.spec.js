@@ -1,7 +1,8 @@
 const userFactory = require('../factories/user'),
   { mutations } = require('../../app/graphql/users/mutations'),
   DUPLICATE_EMAIL_ERROR = 409,
-  INVALID_PASSWORD_ERROR = 422;
+  INVALID_PASSWORD_ERROR = 422,
+  USER_SIGNIN_ERROR = 401;
 
 describe('users', () => {
   describe('resolvers', () => {
@@ -43,6 +44,24 @@ describe('users', () => {
         return mutations.createUser({}, { user: user.dataValues }).catch(err => {
           expect(err.extensions.code).toBe(INVALID_PASSWORD_ERROR);
         });
+      });
+    });
+    describe('login', () => {
+      it('should login an user successfuly', async () => {
+        const password = 'pass1234';
+        const user = await userFactory.create({ password });
+        return mutations.login({}, { credentials: { email: user.email, password } }).then(res => {
+          expect(res).toHaveProperty('accessToken');
+        });
+      });
+      it('should not login an user with invalid password', async () => {
+        const password = 'pass1234';
+        const user = await userFactory.create({ password });
+        return mutations
+          .login({}, { credentials: { email: user.email, password: 'pass4321' } })
+          .catch(err => {
+            expect(err.extensions.code).toBe(USER_SIGNIN_ERROR);
+          });
       });
     });
   });
