@@ -6,7 +6,10 @@ module.exports = gql`
   type Subscription
   type User {
     name: String!
-    lastname: String! @deprecated(reason: "Field is deprecated!")
+    lastname: String!
+      @deprecated(
+        reason: "Field deprecated! use name field instead. lastname field will be removed in the future"
+      )
     email: String!
     password: String!
     id: ID!
