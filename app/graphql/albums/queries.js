@@ -16,7 +16,7 @@ module.exports = {
       album(id: ID): Album!
       albums(offset: Int = ${DEFAULT_OFFSET}, 
              limit: Int = ${DEFAULT_LIMIT}, 
-             orderBy: String = "${DEFAULT_ORDER_BY}", 
+             orderBy: AlbumFields = "${DEFAULT_ORDER_BY}", 
              filter: String): [Album!]!
     }
   `
