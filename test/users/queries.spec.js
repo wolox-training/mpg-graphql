@@ -9,7 +9,7 @@ describe('users', () => {
         query(getUser(user.id)).then(res => {
           expect(res.data).toEqual({
             user: {
-              name: user.name,
+              name: `${user.name} ${user.lastname}`,
               lastname: user.lastname,
               email: user.email
             }

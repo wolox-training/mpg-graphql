@@ -22,7 +22,7 @@
     "prestart": "npm run lint",
     "migrations": "sequelize db:migrate",
     "migrations-test": "NODE_ENV=testing sequelize db:migrate",
-    "start": "nodemon --inspect --max-old-space-size=4096 server.js"
+    "start": "nodemon --inspect server.js"
   },
   "cacheDirectories": [
     "node_modules"

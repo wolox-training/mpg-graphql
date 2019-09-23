@@ -33,6 +33,9 @@ module.exports = makeExecutableSchema({
     },
     Album: {
       ...albums.fieldsQueries
+    },
+    User: {
+      ...users.fieldsQueries
     }
   },
   schemaDirectives: {

@@ -6,6 +6,9 @@ module.exports = {
     user: (_, params) => User.getOne(params),
     users: (_, params) => User.getAll(params)
   },
+  fieldsQueries: {
+    name: parent => `${parent.name} ${parent.lastname}`
+  },
   schema: gql`
     extend type Query {
       user(id: ID, firstName: String, email: String): User!

@@ -8,7 +8,7 @@ describe('users', () => {
       userFactory.attributes().then(user =>
         mutate(createUser(user)).then(res => {
           const { name, lastname, email, password, id } = res.data.createUser;
-          expect(name).toEqual(user.name);
+          expect(name).toEqual(`${user.name} ${user.lastname}`);
           expect(lastname).toEqual(user.lastname);
           expect(email).toEqual(user.email);
           expect(password).toBeDefined();
