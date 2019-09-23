@@ -1,7 +1,8 @@
-const { query } = require('../server.spec'),
+const graphqlTestServer = require('../server.spec'),
+  { query } = graphqlTestServer(),
   { album, albums } = require('./graphql');
 
-describe('Albums', () => {
+describe('albums', () => {
   describe('queries', () => {
     it('should return null when fetching a non existing album', () =>
       query(album(-10)).then(res => {

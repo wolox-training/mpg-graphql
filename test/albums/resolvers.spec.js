@@ -1,26 +1,56 @@
-const { queries } = require('../../app/graphql/albums/queries'),
+const { mutations } = require('../../app/graphql/albums/mutations'),
+  {
+    mutations: { login }
+  } = require('../../app/graphql/users/mutations'),
+  userFactory = require('../factories/user'),
   INVALID_ALBUM_ID = 500;
 
-describe('Albums', () => {
-  describe('Resolvers', () => {
-    describe('album', () => {
-      it('Should get an album successfuly', () =>
-        queries.album({}, { id: 1 }).then(res => {
-          expect(res).toHaveProperty('id');
-          expect(res).toHaveProperty('title');
-          expect(res).toHaveProperty('userId');
-        }));
-      it('Should not get an album with invalid id', () =>
-        queries.album({}, { id: -1 }).catch(err => {
-          expect(err.extensions.code).toBe(INVALID_ALBUM_ID);
-        }));
-    });
-    describe('albums', () => {
-      it('Should get a list of albums successfuly', () =>
-        queries.albums({}, { limit: 5, offset: 0, orderBy: 'id' }).then(res => {
-          expect.arrayContaining(res);
-          expect(res).toHaveLength(5);
-        }));
+describe('albums', () => {
+  describe('resolvers', () => {
+    describe('buyAlbum', () => {
+      it('Should buy an album successfuly', async () => {
+        const password = 'pass1234';
+        const user = await userFactory.create({ password });
+        return login({}, { credentials: { email: user.email, password } })
+          .then(res =>
+            mutations.buyAlbum(
+              {},
+              { albumId: 1 },
+              {
+                token: res.accessToken,
+                session: {
+                  id: user.id
+                }
+              }
+            )
+          )
+          .then(res => {
+            expect(res).toHaveProperty('id');
+            expect(res).toHaveProperty('title');
+            expect(res).toHaveProperty('userId');
+            expect(res).toHaveProperty('albumId');
+          });
+      });
+      it('Should not buy an album successfuly with invalid albumId', async () => {
+        const password = 'pass1234';
+        const user = await userFactory.create({ password });
+        return login({}, { credentials: { email: user.email, password } })
+          .then(res =>
+            mutations.buyAlbum(
+              {},
+              { albumId: -1 },
+              {
+                token: res.accessToken,
+                session: {
+                  id: user.id
+                }
+              }
+            )
+          )
+          .catch(err => {
+            expect(err.extensions.code).toBe(INVALID_ALBUM_ID);
+          });
+      });
     });
   });
 });
