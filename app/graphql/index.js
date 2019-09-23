@@ -2,15 +2,15 @@ const { makeExecutableSchema } = require('graphql-tools'),
   types = require('./types'),
   inputs = require('./inputs'),
   directives = require('./directives'),
+  enums = require('./enums'),
   users = require('./users'),
   healthCheck = require('./healthCheck'),
-  albums = require('./albums'),
-  emums = require('./enums');
+  albums = require('./albums');
 
 const typeDefs = [
   types,
   inputs,
-  emums,
+  enums,
   directives.schemas,
   ...users.schemas,
   ...healthCheck.schemas,

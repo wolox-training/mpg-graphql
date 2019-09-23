@@ -5,4 +5,9 @@ module.exports = gql`
     PUBLIC
     PRIVATE
   }
+  enum AlbumFields {
+    title
+    artist
+    id
+  }
 `;

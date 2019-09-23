@@ -6,10 +6,7 @@ const { user: User } = require('../../models'),
 
 exports.createNewUser = (parent, { user }) =>
   encryptPassword(user.password)
-    .then(hash => {
-      user.password = hash;
-      return User.createModel(user);
-    })
+    .then(hash => User.createModel({ ...user, password: hash }))
     .then(createdUser => {
       logger.info(`user ${createdUser.name} created sussccesfully`);
       return createdUser;
