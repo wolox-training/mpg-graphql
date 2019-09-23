@@ -2,28 +2,26 @@ const { mockAlbumDataResponse, mockAlbumsListDataResponse } = require('../mockDa
   { mockPhotosDataResponse } = require('../mockData/photos'),
   errors = require('../../app/errors');
 
-module.exports = jest.fn(requestParams => {
-  const a = requestParams.uri.split('?');
-  const b = a[0].split('/');
-  const baseUrl = b[1];
-  let idAlbum = 0;
-  switch (baseUrl) {
-    case 'albums':
-      idAlbum = b[2];
-      if (parseInt(idAlbum) > 0) {
-        return Promise.resolve(mockAlbumDataResponse);
-      }
-      if (!idAlbum) {
-        return Promise.resolve(mockAlbumsListDataResponse);
-      }
-      break;
-    case 'photos':
-      idAlbum = requestParams.qs.albumId;
-      if (parseInt(idAlbum) > 0) {
-        return Promise.resolve(mockPhotosDataResponse);
-      }
-      break;
-    default:
+const endpoints = {
+  albums: params => {
+    const albumId = params.uri.split('?')[0].split('/')[2];
+    if (parseInt(albumId) > 0) {
+      return Promise.resolve(mockAlbumDataResponse);
+    }
+    if (!albumId) {
+      return Promise.resolve(mockAlbumsListDataResponse);
+    }
+    return Promise.reject(errors.externalApiError('Error consuming external API'));
+  },
+  photos: params => {
+    if (parseInt(params.qs.albumId) > 0) {
+      return Promise.resolve(mockPhotosDataResponse);
+    }
+    return Promise.reject(errors.externalApiError('Error consuming external API'));
   }
-  return Promise.reject(errors.externalApiError('Error consuming external API'));
+};
+
+module.exports = jest.fn(requestParams => {
+  const endpoint = requestParams.uri.split('?')[0].split('/')[1];
+  return endpoints[endpoint](requestParams);
 });
