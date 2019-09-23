@@ -46,5 +46,16 @@ module.exports = (sequelize, DataTypes) => {
       logger.error(err);
       throw errors.dataBaseError('Error creating album in the database');
     });
+  album.findOrCreateAlbum = albumToFindOrCreate =>
+    album
+      .findOrCreate({
+        where: { albumId: albumToFindOrCreate.id, userId: albumToFindOrCreate.userId },
+        defaults: { title: albumToFindOrCreate.title }
+      })
+      .catch(err => {
+        logger.error(err);
+        throw errors.dataBaseError('Error finding or creating album in the database');
+      });
+
   return album;
 };

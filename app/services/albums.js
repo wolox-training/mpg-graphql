@@ -47,16 +47,12 @@ exports.findPhotosByAlbumId = albumId => {
 exports.findAlbumById = findAlbumById;
 
 exports.buyAlbum = (userId, albumId) =>
-  album
-    .findOneAlbum({ albumId, userId })
-    .then(albumFound => {
-      if (albumFound) {
-        logger.error(`The album ${albumFound.title} was already purchased by the user: ${userId}`);
+  findAlbumById(albumId)
+    .then(albumFound => album.findOrCreateAlbum({ ...albumFound, userId }))
+    .then(([albumToFindOrCreate, created]) => {
+      if (!created) {
+        logger.error(`The album ${albumToFindOrCreate.title} was already purchased by the user: ${userId}`);
         throw errors.albumBuyError('The album was already purchased by the user');
       }
-      return findAlbumById(albumId);
-    })
-    .then(albumFound => {
-      const albumToCreate = { albumId: albumFound.id, title: albumFound.title, userId };
-      return album.createAlbum(albumToCreate);
+      return albumToFindOrCreate;
     });
