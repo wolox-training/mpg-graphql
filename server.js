@@ -16,7 +16,10 @@ migrationsManager
     }); */
     new ApolloServer({
       schema,
-      context: ({ req }) => ({ token: req.headers.authorization || '' })
+      context: ({ req }) => ({ token: req.headers.authorization || '' }),
+      cacheControl: {
+        defaultMaxAge: 60
+      }
     })
       .listen(port)
       .then(({ url, subscriptionsUrl }) => {

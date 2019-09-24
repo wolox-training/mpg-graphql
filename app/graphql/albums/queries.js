@@ -13,11 +13,11 @@ module.exports = {
   },
   schema: gql`
     extend type Query {
-      album(id: ID): Album!
+      album(id: ID): Album! @cacheControl(maxAge: 900)
       albums(offset: Int = ${DEFAULT_OFFSET}, 
-             limit: Int = ${DEFAULT_LIMIT}, 
-             orderBy: AlbumFields = "${DEFAULT_ORDER_BY}", 
-             filter: String): [Album!]!
+             limit: Int = ${DEFAULT_LIMIT},
+             orderBy: AlbumFields = "${DEFAULT_ORDER_BY}",
+             filter: String): [Album!]! @cacheControl(maxAge: 900)
     }
   `
 };

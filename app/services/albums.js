@@ -2,7 +2,16 @@ const { albums_api_url } = require('../../config').common.external_apis,
   request = require('request-promise'),
   errors = require('../errors'),
   logger = require('../logger'),
-  { album } = require('../models');
+  { album } = require('../models'),
+  { init } = require('../utils/cache');
+
+const getter = options =>
+  request(options).catch(err => {
+    logger.error(err.message);
+    throw errors.externalApiError('Error consuming external API');
+  });
+
+const cache = init(getter);
 
 const findAlbumById = id => {
   const options = {
@@ -11,10 +20,7 @@ const findAlbumById = id => {
     json: true
   };
   logger.info(`Consuming an external api with url: ${options.uri}`);
-  return request(options).catch(err => {
-    logger.error(err.message);
-    throw errors.externalApiError('Error consuming external API');
-  });
+  return cache.load(options);
 };
 
 exports.findAlbums = () => {
@@ -24,10 +30,7 @@ exports.findAlbums = () => {
     json: true
   };
   logger.info(`Consuming an external api with url: ${options.uri}`);
-  return request(options).catch(err => {
-    logger.error(err.message);
-    throw errors.externalApiError('Error consuming external API');
-  });
+  return cache.load(options);
 };
 
 exports.findPhotosByAlbumId = albumId => {
@@ -38,10 +41,7 @@ exports.findPhotosByAlbumId = albumId => {
     json: true
   };
   logger.info(`Consuming an external api with url: ${options.uri}?albumId=${albumId}`);
-  return request(options).catch(err => {
-    logger.error(err.message);
-    throw errors.externalApiError('Error consuming external API');
-  });
+  return cache.load(options);
 };
 
 exports.findAlbumById = findAlbumById;
