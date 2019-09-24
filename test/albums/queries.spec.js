@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 const graphqlTestServer = require('../server.spec'),
   { query } = graphqlTestServer(),
   { album, albums } = require('./graphql');
@@ -20,5 +22,17 @@ describe('albums', () => {
       query(albums()).then(res => {
         expect(res.data.albums).toHaveLength(3);
       }));
+    it('should test the caching implementation to get albums list', () => {
+      const timeBeforeWithoutCache = moment();
+      return query(albums()).then(() => {
+        const timeAfterWithoutCache = moment().diff(timeBeforeWithoutCache);
+        const timeBeforeWithCache = moment();
+        return query(albums()).then(() => {
+          const timeAfterWithCache = moment().diff(timeBeforeWithCache);
+          const diff = timeAfterWithoutCache - timeAfterWithCache;
+          expect(diff).toBeGreaterThan(50);
+        });
+      });
+    });
   });
 });

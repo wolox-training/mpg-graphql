@@ -2,6 +2,8 @@ const { mockAlbumDataResponse, mockAlbumsListDataResponse } = require('../mockDa
   { mockPhotosDataResponse } = require('../mockData/photos'),
   errors = require('../../app/errors');
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const endpoints = {
   albums: params => {
     const albumId = params.uri.split('?')[0].split('/')[2];
@@ -23,5 +25,5 @@ const endpoints = {
 
 module.exports = jest.fn(requestParams => {
   const endpoint = requestParams.uri.split('?')[0].split('/')[1];
-  return endpoints[endpoint](requestParams);
+  return delay(100).then(() => endpoints[endpoint](requestParams));
 });
